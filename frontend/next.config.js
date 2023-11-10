@@ -4,3 +4,9 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
+module.exports = {
+  webpack: (config, { isServer }) => {
+    // Remove the Python loader configuration
+    return config;
+  },
+};

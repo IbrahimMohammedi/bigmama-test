@@ -10,10 +10,10 @@ const Summarization = () => {
     const handleSummarize = async () => {
         try {
             // POST request
-            const response = await fetch('/api/summarize', {
+            const response = await fetch('http://localhost:8000/api/summarize', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 // Sending the request body
                 body: JSON.stringify ({ text, max_lenghth: maxLength}),
