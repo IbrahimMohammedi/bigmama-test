@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 
 
 const Summarization = () => {
@@ -7,6 +7,7 @@ const Summarization = () => {
     const [text, setText] = useState('');
     const [maxLength, setMaxLength] = useState(150);
     const [summary, setSummary] = useState('');
+    const [error, setError] = useState('');
 
     // handleSummarize handles the summurize button click
     const handleSummarize = async () => {
@@ -18,13 +19,23 @@ const Summarization = () => {
                     'Content-Type': 'application/json',
                 },
                 // Sending the request body
-                body: JSON.stringify ({ text, max_lenghth: maxLength}),
+                body: JSON.stringify ({ text, max_length: maxLength}),
             });
             // Parsing
+            if (!response.ok) {
+                // Handling non-successful response
+                const errorData = await response.json();
+                throw new Error(errorData.detail);
+            }
+            
             const data = await response.json();
             setSummary(data.summary);
+            setError('');
+
         } catch (error) {
-            console.error('Error summarizing the text: ', error);
+            console.error('Error summarizing the text: ', error.meesage);
+            setSummary('');
+            setError('Error: ${error.message}');
         }
     };
 
@@ -55,7 +66,8 @@ const Summarization = () => {
           Summarize
         </Button>
       </Form>
-
+      {error && <Alert variant="danger">{error}</Alert>}
+      
       <div className="mt-3">
         <strong>Summary:</strong>
         <p>{summary}</p>
