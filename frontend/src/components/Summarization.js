@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+
 
 const Summarization = () => {
     // Text variables 
@@ -28,22 +30,37 @@ const Summarization = () => {
 
     // JSX
     return (
-        <div>
-          {/* User Input*/}  
-          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={10} cols={50} />
-          <br />
-          {/*Max Length Input */}
-          <label>
-            Max length of summary:
-            <input type="number" value={maxLength} onChange={(e) => setMaxLength(e.target.value)} />
-            </label>
-          {/* Summarize Button */}
-          <button onClick={handleSummarize}>Summarize</button>
-          <br />
-          {/*Display Result */}
-          <strong>Summary: </strong>
-          <p>{summary}</p>
-        </div>
+        <div className="container mt-5">
+      <Form>
+        <Form.Group controlId="formText">
+          <Form.Label>Text to Summarize:</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </Form.Group>
+
+        <Form.Group controlId="formMaxLength">
+          <Form.Label>Max Length:</Form.Label>
+          <Form.Control
+            type="number"
+            value={maxLength}
+            onChange={(e) => setMaxLength(e.target.value)}
+          />
+        </Form.Group>
+
+        <Button variant="primary" onClick={handleSummarize}>
+          Summarize
+        </Button>
+      </Form>
+
+      <div className="mt-3">
+        <strong>Summary:</strong>
+        <p>{summary}</p>
+      </div>
+    </div>
     );
 };
 
