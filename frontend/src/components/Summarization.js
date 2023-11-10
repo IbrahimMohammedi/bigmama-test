@@ -8,11 +8,13 @@ const Summarization = () => {
     const [maxLength, setMaxLength] = useState(150);
     const [summary, setSummary] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     // handleSummarize handles the summurize button click
     const handleSummarize = async () => {
         try {
             // POST request
+            setLoading(true);
             const response = await fetch('http://localhost:8000/api/summarize', {
                 method: 'POST',
                 headers: {
@@ -36,43 +38,45 @@ const Summarization = () => {
             console.error('Error summarizing the text. ', error);
             setSummary('');
             setError(`Error: ${error.message}`);
+        }  finally {
+            setLoading(false);
         }
     };
 
     // JSX
     return (
         <div className="container mt-5">
-      <Form>
-        <Form.Group controlId="formText">
-          <Form.Label>Text to Summarize:</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={5}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="formMaxLength">
-          <Form.Label>Max Length:</Form.Label>
-          <Form.Control
-            type="number"
-            value={maxLength}
-            onChange={(e) => setMaxLength(e.target.value)}
-          />
-        </Form.Group>
-
-        <Button variant="primary" onClick={handleSummarize}>
-          Summarize
-        </Button>
-      </Form>
-      {error && <Alert variant="danger">{error}</Alert>}
-
-      <div className="mt-3">
-        <strong>Summary:</strong>
-        <p>{summary}</p>
-      </div>
-    </div>
+          <Form>
+            <Form.Group controlId="formText">
+              <Form.Label>Text to Summarize:</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
+            </Form.Group>
+            <br></br>
+            <Form.Group controlId="formMaxLength">
+              <Form.Label>Max Length:</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={maxLength}
+                  onChange={(e) => setMaxLength(e.target.value)}
+                />
+            </Form.Group>
+            <br></br>
+            <Button variant="primary" onClick={handleSummarize} disabled={loading}>
+              {loading ? 'Summarizing...' : 'Summarize'}
+            </Button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className="mt-3">
+              <strong>Summary:</strong>
+              <p>{summary}</p>
+            </div>
+          </Form>
+      
+         </div>
     );
 };
 
