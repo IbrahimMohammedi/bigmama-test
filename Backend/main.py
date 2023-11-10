@@ -25,7 +25,12 @@ async def summarize_text(data: dict):
         text = data.get("text", "")
         max_length = data.get("max_length", 150)
 
+        if not text:
+            raise HTTPException(status_code=400, detail={"error": "Input text is required"})
+
         summary = summarizer(text, max_length=max_length, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)[0]['summary_text']
         return {"summary": summary}
+    except HTTPException as http_error:
+        raise http_error
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error summarizing text: {str(e)}")
+        raise HTTPException(status_code=500, detail={"error": f"Error summarizing text: {str(e)}"})

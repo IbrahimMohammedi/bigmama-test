@@ -19,13 +19,13 @@ const Summarization = () => {
                     'Content-Type': 'application/json',
                 },
                 // Sending the request body
-                body: JSON.stringify ({ text, max_length: maxLength}),
+                body: JSON.stringify ({ text, max_length:  Number(maxLength)}),
             });
             // Parsing
             if (!response.ok) {
                 // Handling non-successful response
                 const errorData = await response.json();
-                throw new Error(errorData.detail);
+                throw new Error(errorData.detail.error || "An error occurred");
             }
             
             const data = await response.json();
@@ -33,9 +33,9 @@ const Summarization = () => {
             setError('');
 
         } catch (error) {
-            console.error('Error summarizing the text: ', error.meesage);
+            console.error('Error summarizing the text. ', error);
             setSummary('');
-            setError('Error: ${error.message}');
+            setError(`Error: ${error.message}`);
         }
     };
 
@@ -67,7 +67,7 @@ const Summarization = () => {
         </Button>
       </Form>
       {error && <Alert variant="danger">{error}</Alert>}
-      
+
       <div className="mt-3">
         <strong>Summary:</strong>
         <p>{summary}</p>
