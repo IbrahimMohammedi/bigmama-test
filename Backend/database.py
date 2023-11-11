@@ -1,5 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from fastapi import HTTPException
+from bson import ObjectId
+
 
 # Defining the MongoDB class
 class MongoDB:
@@ -8,7 +10,7 @@ class MongoDB:
         self.db = self.client[database_name]
         self.collection = self.db["summaries"]
 
-    # Create function
+    # Create summary 
     async def create_summary(self, user_input: str, max_length: int, summary: str):
         try :
             result = await self.collection.insert_one(
@@ -21,7 +23,7 @@ class MongoDB:
             return str(result.inserted_id)
         except Exception as e:
             raise HTTPException(status_code=409, detail={"error": f"Failed to create summary: {str(e)}"})
-        
+    # Read all sumarries    
     async def read_summaries(self):
         try:
             cursor = self.collection.find({})
@@ -32,5 +34,80 @@ class MongoDB:
             return summaries
         except Exception as e:
             raise HTTPException(status_code=500, detail={"error": f"Error reading summaries: {str(e)}"})
+    # Read summary by id
+    async def read_summary(self, summary_id: str):
+        try:
+            # Convert summary_id to ObjectId
+            object_id = ObjectId(summary_id)
+            
+            summary = await self.collection.find_one({"_id": object_id})
+
+            if summary:
+                # Convert ObjectId to str for JSON serialization
+                summary['_id'] = str(summary['_id'])
+                return summary
+            else:
+                raise HTTPException(status_code=404, detail={"error": "Summary not found"})
+        except HTTPException as http_error:
+            raise http_error
+        except Exception as e:
+            print(f"Error reading summary: {str(e)}")
+            raise HTTPException(status_code=500, detail={"error": f"Error reading summary: {str(e)}", "original_exception": str(type(e))})
+
+    # Update summary by id
+    async def update_summary(self, summary_id: str, data: dict):
+        try:
+            # Convert summary_id to ObjectId
+            object_id = ObjectId(summary_id)
+
+            # Extract fields from data
+            user_input = data.get("user_input")
+            max_length = data.get("max_length")
+            summary = data.get("summary")
+
+            # Validate at least one field is provided
+            if not any([user_input, max_length, summary]):
+                raise HTTPException(status_code=400, detail={"error": "Please provide at least one field to update"})
+
+            # Create update dictionary
+            update_dict = {}
+            if user_input:
+                update_dict["user_input"] = user_input
+            if max_length:
+                update_dict["max_length"] = max_length
+            if summary:
+                update_dict["summary"] = summary
+
+            # Perform update
+            result = await self.collection.update_one({"_id": object_id}, {"$set": update_dict})
+
+            # Check if the update was successful
+            if result.matched_count == 0:
+                raise HTTPException(status_code=404, detail={"error": "Summary not found"})
+            
+            return {"message": "Summary updated successfully"}
+        except HTTPException as http_error:
+            raise http_error
+        except Exception as e:
+            print(f"Error updating summary: {str(e)}")
+            raise HTTPException(status_code=500, detail={"error": f"Error updating summary: {str(e)}", "original_exception": str(type(e))})
+
+
+    # Delete summary by id
+    async def delete_summary(self, summary_id: str):
+        try:
+            object_id = ObjectId(summary_id)
+            
+            result = await self.collection.delete_one({"_id": object_id})
+
+            if result.deleted_count == 0:
+                raise HTTPException(status_code=404, detail={"error": "Summary not found"})
+            else:
+                return {"message": "Summary deleted successfully"}
+        except HTTPException as http_error:
+            raise http_error
+        except Exception as e:
+            print(f"Error deleting summary: {str(e)}")
+            raise HTTPException(status_code=500, detail={"error": f"Error deleting summary: {str(e)}", "original_exception": str(type(e))})
 
 mongo_db = MongoDB("mongodb://localhost:27017/", "SummarizationDB")

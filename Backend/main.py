@@ -42,8 +42,34 @@ async def summarize_text(data: dict):
         raise http_error
     except Exception as e:
         raise HTTPException(status_code=500, detail={"error": f"Error summarizing text: {str(e)}"})
-
+# Get all summaries
 @app.get("/api/summaries")
 async def get_summaries():
     summaries = await mongo_db.read_summaries()
     return summaries
+# Get a summary for a given id
+@app.get("/api/summary/{summary_id}")
+async def get_summary(summary_id: str):
+    try:
+        summary = await mongo_db.read_summary(summary_id)
+        return {"summary": summary}
+    except HTTPException as http_error:
+        return http_error
+    
+# Update a summary for a given id
+@app.put("/api/summary/{summary_id}")
+async def update_summary(summary_id: str, data: dict):
+    try:
+        result = await mongo_db.update_summary(summary_id, data)
+        return result
+    except HTTPException as http_error:
+        return http_error
+
+# Delete a summary for a given id   
+@app.delete("/api/summary/{summary_id}")
+async def delete_summary(summary_id: str):
+    try:
+        result = await mongo_db.delete_summary(summary_id)
+        return result
+    except HTTPException as http_error:
+        return http_error
