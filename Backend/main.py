@@ -18,11 +18,13 @@ app.add_middleware(
 )
 
 summarizer = pipeline("summarization")
-
+# Health check
 @app.get("/")
 def read_root():
     return {"message": "Hello, there"}
 
+# CRUD operations:
+# Post a summary
 @app.post("/api/summarize")
 async def summarize_text(data: dict):
     try:
@@ -33,10 +35,15 @@ async def summarize_text(data: dict):
             raise HTTPException(status_code=400, detail={"error": "Please enter a text to summarize: "})
 
         summary = summarizer(text, max_length=max_length, min_length=50, length_penalty=2.0, num_beams=4, early_stopping=True)[0]['summary_text']
-        mongo_id = await mongo_db.insert_summary(user_input=text, max_length=max_length, summary=summary)
+        mongo_id = await mongo_db.create_summary(user_input=text, max_length=max_length, summary=summary)
         
         return {"summary": summary, "mongo_id": mongo_id}
     except HTTPException as http_error:
         raise http_error
     except Exception as e:
         raise HTTPException(status_code=500, detail={"error": f"Error summarizing text: {str(e)}"})
+
+@app.get("/api/summaries")
+async def get_summaries():
+    summaries = await mongo_db.read_summaries()
+    return summaries
