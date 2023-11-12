@@ -1,13 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@/styles/globals.css'
-import { Container } from 'react-bootstrap';
-function MyApp({ Component, pageProps }) {
+import '@/styles/globals.css';
+import Navbar from '../components/Navbar';
+
+export default function MyApp({ Component, pageProps }) {
   return (
-    <Container>
-      {/* Add any global components or layouts here */}
+    <div>
+      <Navbar />
       <Component {...pageProps} />
-    </Container>
+    </div>
+    
   );
 }
 
-export default MyApp;
