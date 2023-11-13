@@ -16,7 +16,9 @@ const Summarization = () => {
   const handleSummarize = async () => {
     try {
       setLoading(true);
-      if (text.length < 50) {
+      if (text.length === 0) {
+        throw new Error("Please enter a text");
+      } else if (text.length < 50) {
         throw new Error("Text must be at least 50 characters long for summarization.");
       }
       const response = await fetch("http://localhost:8000/api/summarize", {
@@ -60,12 +62,13 @@ const Summarization = () => {
         <Col>
           <Form.Group controlId="formText">
             <Form.Label style={{ fontWeight: 'bold' }}>Text to Summarize:</Form.Label>
-              <div style={{ position: 'relative' }}>
+              <div style={{ position: 'relative'}}>
               <Form.Control
                 as="textarea"
                 rows={10}
-                placeholder="Enter your text here"
+                placeholder="Enter your text here . . . . ."
                 value={text}
+                style={{backgroundColor:'#EEEEEE'}}
                 onChange={handleTextChange}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -79,10 +82,10 @@ const Summarization = () => {
                   style={{
                     position: 'absolute',
                     top: '4px',
-                    right: '15px',
+                    right: '22px',
                     cursor: 'pointer',
                     color: 'black',
-                    fontSize: '19px',
+                    fontSize: '20px',
                   }}
                   onClick={() => {
                     setText("");
@@ -100,7 +103,8 @@ const Summarization = () => {
             <Form.Control
               type="number"
               value={maxLength}
-              className="col-6"
+              style={{backgroundColor:'#EEEEEE'}}
+              className="col-md-6"
               onChange={(e) => setMaxLength(e.target.value)}
             />
           </Form.Group>
@@ -112,6 +116,7 @@ const Summarization = () => {
               as="textarea"
               rows={10}
               disabled
+              style={{backgroundColor:'#EEEEEE'}}
               placeholder="Summarized text will show here"
               value={summary}
             />
@@ -119,13 +124,17 @@ const Summarization = () => {
         </Col>
       </Row>
       <br />
-      <Button variant="primary" onClick={handleSummarize} disabled={loading} 
-      style={{ fontWeight: 'bold',
-              backgroundColor: 'black',
-              color: 'white',
-              border: 'none', }}>
-        {loading ? "Summarizing..." : "Summarize"}
-      </Button>
+      <Row>
+        <Col>   
+          <Button variant="primary" onClick={handleSummarize} disabled={loading} 
+          style={{ fontWeight: 'bold',
+                  backgroundColor: 'black',
+                  color: 'white',
+                  border: 'none', }}>
+            {loading ? "Summarizing..." : "Summarize"}
+          </Button>
+        </Col>
+      </Row>
       <br />
       {error && <Alert variant="danger">{error}</Alert>}
       <br />

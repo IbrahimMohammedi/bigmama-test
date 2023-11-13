@@ -12,22 +12,32 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 50, 50, 50;
+    --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 200, 200, 200;
     --background-end-rgb: 50, 50, 50;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: rgba(255, 255, 255, 0.9);
+  background: #343a40;
 }
-
-.custom-close-button {
-  color: black;
+.Footer{
+  text-align: center;
+  margin-top: auto;
+}
+.App{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.Icons{
+  max-width: 750px;
+  margin: 0 auto;
+  font-size: 2rem;
+}
+.highlighted-link {
+  color: rgb(220, 220, 220);
+  text-decoration: underline;
+  font-weight: bold;
 }

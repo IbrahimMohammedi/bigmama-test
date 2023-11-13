@@ -1,14 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/styles/globals.css';
 import Navbar from '../components/Navbar';
+import Footer from "../components/Footer";
 
-export default function MyApp({ Component, pageProps }) {
+
+function App({ Component, pageProps }) {
   return (
-    <div>
+      <div className="App">
       <Navbar />
       <Component {...pageProps} />
-    </div>
-    
+      <Footer />
+      </div>
   );
 }
+
+export default App;
 

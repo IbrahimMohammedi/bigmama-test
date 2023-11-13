@@ -1,3 +1,4 @@
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -13,15 +14,14 @@ function TSNavbar() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
-            <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
+            <NavDropdown title="HuggingFace" id="collapsible-nav-dropdown">
+              <NavDropdown.Item href="https://huggingface.co/docs/api-inference/quicktour">API Quick Tour</NavDropdown.Item>
+              <NavDropdown.Item href="https://huggingface.co/docs/api-inference/detailed_parameters?code=python#summarization-task">
+              Summarization API
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
+              <NavDropdown.Item href="https://huggingface.co">
+               HuggingFace
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
