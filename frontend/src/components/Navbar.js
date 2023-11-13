@@ -20,16 +20,12 @@ function TSNavbar() {
               Summarization API
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="https://huggingface.co">
-               HuggingFace
-              </NavDropdown.Item>
+              <NavDropdown.Item href="https://huggingface.co">HuggingFace</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
             <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link eventKey={2} href="/signup">
-              Sign up
-            </Nav.Link>
+            <Nav.Link eventKey={2} href="/signup"> Sign up</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
