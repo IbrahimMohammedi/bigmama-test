@@ -38,6 +38,12 @@ summarizer = pipeline("summarization")
 # Health check
 @app.get("/")
 def read_root():
+    """
+    Health check endpoint.
+
+    Returns:
+        dict: A dictionary indicating the status of the application.
+    """
     return {"message": "Hello, there"}
 
 # CRUD operations:
@@ -45,6 +51,15 @@ def read_root():
 # Post a summary
 @app.post("/api/summarize")
 async def summarize_text(data: dict):
+    """
+    Summarize text.
+
+    Args:
+        data (dict): The input data containing "text" and "max_length" fields.
+
+    Returns:
+        dict: A dictionary containing the summary and MongoDB document ID.
+    """
     try:
         text = data.get("text", "")
         max_length = data.get("max_length", 150)
@@ -68,6 +83,12 @@ async def summarize_text(data: dict):
 # Get all summaries
 @app.get("/api/summaries")
 async def get_summaries():
+    """
+    Get all summaries.
+
+    Returns:
+        list: A list of summaries.
+    """
     try:
         summaries = await mongo_db.read_summaries()
         return summaries
@@ -79,6 +100,15 @@ async def get_summaries():
 # Get a summary for a given id
 @app.get("/api/summary/{summary_id}")
 async def get_summary(summary_id: str):
+    """
+    Get a summary by ID.
+
+    Args:
+        summary_id (str): The ID of the summary.
+
+    Returns:
+        dict: A dictionary containing the summary.
+    """
     try:
         summary = await mongo_db.read_summary(summary_id)
         return {"summary": summary}
@@ -92,6 +122,16 @@ async def get_summary(summary_id: str):
 # Update a summary for a given id
 @app.put("/api/summary/{summary_id}")
 async def update_summary(summary_id: str, data: dict):
+    """
+    Update a summary by ID.
+
+    Args:
+        summary_id (str): The ID of the summary.
+        data (dict): The data to update the summary.
+
+    Returns:
+        dict: A dictionary indicating the result of the update operation.
+    """
     try:
         result = await mongo_db.update_summary(summary_id, data)
         return result
@@ -105,6 +145,15 @@ async def update_summary(summary_id: str, data: dict):
 # Delete a summary for a given id   
 @app.delete("/api/summary/{summary_id}")
 async def delete_summary(summary_id: str):
+    """
+    Delete a summary by ID.
+
+    Args:
+        summary_id (str): The ID of the summary.
+
+    Returns:
+        dict: A dictionary indicating the result of the delete operation.
+    """
     try:
         result = await mongo_db.delete_summary(summary_id)
         return result
