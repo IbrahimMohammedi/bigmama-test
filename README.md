@@ -10,12 +10,15 @@ The Text Summarization Project is a tool that leverages advanced natural languag
 
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
+    - [Overview](#overview)
+    - [Base URL](#base-url)
+    - [Endpoints](#endpoints)
 - [How To Build And Run](#how-to-build-and-run)
   - [Prerequisites](#prerequisites)
-  - [Build Docker Containers](#build-docker-containers)
+  - [Build The application image](#build-the-application-image)
   - [Docker Compose](#docker-compose)
   - [Access The application](#access-the-application)
-- [Future Improvments](#future-improvments)
+- [Future Improvements](#future-improvements)
 
 
 
@@ -26,7 +29,7 @@ The project is composed of :
 * A backend API server built with FastAPI located in the [Backend](Backend) dir.
 * A frontend web app build with React and located in the [frontend](frontend) dir.
 
-# Text Summarization API Documentation
+## API Documentation:
 
 ## Overview
 
@@ -80,6 +83,8 @@ Delete a summary by ID:
     Returns:
         dict: A dictionary indicating the result of the delete operation.
 
+API overview from FastAPI Swagger UI tool :
+
 ![API](frontend/public/APIRoutes.jpg)
 
 
@@ -92,5 +97,41 @@ Ensure you have the following installed:
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
-## How To Build And Run
+## Build The application image
 
+1. Backend:
+    ```shell script
+    docker build -t fastapi ./Backend
+    ```
+2. Frontend:
+    ```shell script
+    docker build -t react ./frontend
+    ```
+
+## Docker Compose
+1. Create the network:
+    ```shell script
+    docker-compose up
+    ```
+
+## Access The Application 
+
+1. Access the application at : 
+
+http://localhost:3000
+
+2. You may view the FastAPI Swagger UI to view API routes and test CRUD operations at :
+
+http://localhost:8000/docs
+
+Note: If you encounter any issues running the application please contact me :)
+
+## Future Improvements
+
+- Add Authtication.
+- Backend Unit Tests.
+- Enable SSL mode for secure database.
+- Switch to Typescript for better developping experince.
+- Add React's Error Boundary.
+- Implement React's Routing system.
+- Add Toast Notifications
