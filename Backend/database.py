@@ -117,4 +117,4 @@ class MongoDB:
             print(f"Error deleting summary: {str(e)}")
             raise HTTPException(status_code=500, detail={"error": f"Error deleting summary: {str(e)}", "original_exception": str(type(e))})
 
-mongo_db = MongoDB("mongodb://localhost:27017/", "SummarizationDB")
+mongo_db = MongoDB("mongodb://database:27017/", "SummarizationDB")

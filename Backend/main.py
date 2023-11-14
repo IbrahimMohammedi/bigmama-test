@@ -20,7 +20,7 @@ logger.addHandler(file_handler)
 app = FastAPI()
 
 # Connect to MongoDB
-mongo_db = MongoDB("mongodb://localhost:27017/", "SummarizationDB")
+mongo_db = MongoDB("mongodb://database:27017/", "SummarizationDB")
 
 # Set up CORS (Cross-Origin Resource Sharing) middleware
 origins = ["http://localhost:3000"]  # Adjust this to the actual origin of your frontend
